@@ -97,19 +97,19 @@ namespace api_bangun_kebun.Controllers
 
 
         [HttpPatch("updatePassword")]
-        public IActionResult updatePassword(string password, string email)
+        public IActionResult updatePassword(string newPassword, string oldPassword, int id_user)
         {
             try
             {
                 AuthContext penggunaContext = new AuthContext(this.__constr);
-                bool checkPassword = penggunaContext.checkPassword(password, email);
+                bool checkPassword = penggunaContext.checkPassword(oldPassword, id_user);
 
-                if (!checkPassword)
+                if (checkPassword == false)
                 {
                     return StatusCode(500, new { message = "Password lama salah!"});
                 }
 
-                bool update = penggunaContext.updatePassword(password, email);
+                bool update = penggunaContext.updatePassword(newPassword, id_user);
 
                 if (update)
                 {
