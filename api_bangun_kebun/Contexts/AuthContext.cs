@@ -73,13 +73,13 @@ namespace api_bangun_kebun.Contexts
         }
 
 
-        public List<Pengguna> getDataLogin(string email, string password)
+        public List<Pengguna> getDataLogin(string email)
         {
             List<Pengguna> pengguna = new List<Pengguna>();
 
-            string query = @"SELECT id_user, nama_lengkap, username, no_telepon, email, password, kecamatan_id_kecamatan FROM pengguna p 
+            string query = @"SELECT * FROM pengguna p 
                             join kecamatan ke on p.kecamatan_id_kecamatan = ke.id_kecamatan
-                            WHERE email = @email and password = @password";
+                            WHERE email = @email";
 
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
@@ -87,7 +87,6 @@ namespace api_bangun_kebun.Contexts
             {
                 NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
                 cmd.Parameters.AddWithValue("@email", email);
-                cmd.Parameters.AddWithValue("@password", password);
 
                 NpgsqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -149,18 +148,45 @@ namespace api_bangun_kebun.Contexts
             }
         }
 
-        public bool updatePassword(string password, int id)
+        public bool checkPassword(string password, string email)
+        {
+            bool isExist = false;
+            string query = @"SELECT COUNT (*) FROM pengguna WHERE password = @password AND email = @email";
+            SqlDbHelper db = new SqlDbHelper(this._constr);
+
+            try
+            {
+                NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
+                cmd.Parameters.AddWithValue("@email", email);
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+                cmd.Parameters.AddWithValue("@password", hashedPassword);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                isExist = (count > 0);
+
+                cmd.Dispose();
+                db.closeConnection();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Registrasi gagal: " + ex.Message);
+            }
+
+            return isExist;
+        }
+
+        public bool updatePassword(string password, string email)
         {
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
             string query = @"update pengguna set 
                                     password = @password
-                            where id_user = @id_user";
+                            where email = @email";
 
             try
             {
                 NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
-                cmd.Parameters.AddWithValue("@id_user", id);
+                cmd.Parameters.AddWithValue("@email", email);
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
                 cmd.Parameters.AddWithValue("@password", hashedPassword);
 
