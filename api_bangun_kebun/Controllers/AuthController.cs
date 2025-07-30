@@ -17,7 +17,7 @@ namespace api_bangun_kebun.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult login(Pengguna data)
+        public IActionResult login(Login data)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace api_bangun_kebun.Controllers
                     return Unauthorized(new { message = "Email atau password salah!" });
                 }
 
-                List<Pengguna> user = penggunaContext.getDataLogin(data.email, data.password);
+                List<Pengguna> user = penggunaContext.getDataLogin(data.email);
                 return Ok(user);
             }
             catch (Exception ex)
@@ -97,12 +97,19 @@ namespace api_bangun_kebun.Controllers
 
 
         [HttpPatch("updatePassword")]
-        public IActionResult updatePassword(string password, int id)
+        public IActionResult updatePassword(string password, string email)
         {
             try
             {
                 AuthContext penggunaContext = new AuthContext(this.__constr);
-                bool update = penggunaContext.updatePassword(password, id);
+                bool checkPassword = penggunaContext.checkPassword(password, email);
+
+                if (!checkPassword)
+                {
+                    return StatusCode(500, new { message = "Password lama salah!"});
+                }
+
+                bool update = penggunaContext.updatePassword(password, email);
 
                 if (update)
                 {
