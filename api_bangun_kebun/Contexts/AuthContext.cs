@@ -1,6 +1,8 @@
 ﻿using api_bangun_kebun.Helpers;
 using api_bangun_kebun.Models;
 using Npgsql;
+using BCrypt.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api_bangun_kebun.Contexts
 {
@@ -26,13 +28,14 @@ namespace api_bangun_kebun.Contexts
                 cmd.Parameters.AddWithValue("@no_telepon", dataRegis.no_telepon);
                 cmd.Parameters.AddWithValue("@username", dataRegis.username);
                 cmd.Parameters.AddWithValue("@email", dataRegis.email);
-                cmd.Parameters.AddWithValue("@password", dataRegis.password);
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dataRegis.password);
+                cmd.Parameters.AddWithValue("@password", hashedPassword);
                 cmd.Parameters.AddWithValue("@id_kecamatan", dataRegis.id_kecamatan);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.CloseConnection();
+                db.closeConnection();
 
                 return rowsAffected > 0;
             }
@@ -43,29 +46,32 @@ namespace api_bangun_kebun.Contexts
         }
         public bool checkLogin(string email, string password)
         {
-            bool isExist = false;
-            string query = @"SELECT COUNT (*) FROM pengguna WHERE email = @email and password = @password";
+            string query = "SELECT password FROM pengguna WHERE email = @email";
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
             try
             {
                 NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
                 cmd.Parameters.AddWithValue("@email", email);
-                cmd.Parameters.AddWithValue("@password", password);
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                isExist = (count > 0);
+                string hashedPassword = cmd.ExecuteScalar()?.ToString();
 
                 cmd.Dispose();
-                db.CloseConnection();
+                db.closeConnection();
+
+                if (string.IsNullOrEmpty(hashedPassword))
+                {
+                    return false;
+                }
+
+                return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
             }
             catch (Exception ex)
             {
-                throw new Exception("Registrasi gagal: " + ex.Message);
+                throw new Exception("Login gagal: " + ex.Message);
             }
-
-            return isExist;
         }
+
 
         public List<Pengguna> getDataLogin(string email, string password)
         {
@@ -93,13 +99,12 @@ namespace api_bangun_kebun.Contexts
                         no_telepon = reader["no_telepon"].ToString(),
                         username = reader["username"].ToString(),
                         email = reader["email"].ToString(),
-                        password = reader["password"].ToString(),
                         id_kecamatan = int.Parse(reader["kecamatan_id_kecamatan"].ToString()),
                     });
                 }
 
                 cmd.Dispose();
-                db.CloseConnection();
+                db.closeConnection();
             }
             catch (Exception ex)
             {
@@ -134,7 +139,7 @@ namespace api_bangun_kebun.Contexts
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.CloseConnection();
+                db.closeConnection();
 
                 return rowsAffected > 0;
             }
@@ -156,12 +161,13 @@ namespace api_bangun_kebun.Contexts
             {
                 NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
                 cmd.Parameters.AddWithValue("@id_user", id);
-                cmd.Parameters.AddWithValue("@password", password);
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+                cmd.Parameters.AddWithValue("@password", hashedPassword);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.CloseConnection();
+                db.closeConnection();
 
                 return rowsAffected > 0;
             }

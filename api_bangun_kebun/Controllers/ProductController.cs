@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using api_bangun_kebun.Contexts;
+using api_bangun_kebun.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api_bangun_kebun.Controllers
 {
@@ -12,6 +14,21 @@ namespace api_bangun_kebun.Controllers
         {
             __config = configuration;
             __constr = __config.GetConnectionString("koneksi");
+        }
+
+        [HttpGet("dataProduct")]
+        public IActionResult getDataProduct()
+        {
+            ProductContext productContext = new ProductContext(this.__constr);
+
+            List<Product> dataProduct = productContext.getDataProduct();
+
+            if (dataProduct.Count > 0)
+            {
+                return Ok(dataProduct);
+            }
+
+            return BadRequest();
         }
     }
 }
