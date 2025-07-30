@@ -36,7 +36,7 @@ namespace api_bangun_kebun.Contexts
                 }
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
             }catch(Exception ex)
             {
                 _errMsg = ex.Message;
