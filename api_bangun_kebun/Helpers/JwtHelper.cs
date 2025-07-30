@@ -1,4 +1,5 @@
-﻿//using Microsoft.IdentityModel.Tokens;
+﻿//using api_bangun_kebun.Models;
+//using Microsoft.IdentityModel.Tokens;
 //using System.IdentityModel.Tokens.Jwt;
 //using System.Security.Claims;
 //using System.Text;
@@ -7,23 +8,23 @@
 //{
 //    public class JwtHelper
 //    {
-//        private readonly IConfiguration _config;
-//        public JwtHelper(IConfiguration config)
+//        private readonly IConfiguration _configuration;
+//        public JwtHelper(IConfiguration configuration)
 //        {
-//            _config = config;
+//            _configuration = configuration;
 //        }
 
-//        public string GenerateToken(Pengguna pengguna)
+//        public string generateTokenPegawai(Pengguna pengguna)
 //        {
 //            var tokenHandler = new JwtSecurityTokenHandler();
-//            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
+//            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
 //            var tokenDescriptor = new SecurityTokenDescriptor
 //            {
 //                Subject = new ClaimsIdentity(new[]
 //                {
-//                    new Claim("id_pengguna", pengguna.id_pengguna.ToString()),
+//                    new Claim(ClaimTypes.NameIdentifier, pengguna.id.ToString()),
+//                    new Claim("Id", pengguna.id.ToString()),
 //                    new Claim(ClaimTypes.Email, pengguna.email),
-//                    new Claim(ClaimTypes.Role, pengguna.nama_peran)
 //                }),
 //                Expires = DateTime.UtcNow.AddHours(1),
 //                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
