@@ -16,35 +16,20 @@ namespace api_bangun_kebun.Controllers
             __constr = __config.GetConnectionString("koneksi");
         }
 
-        [HttpGet("{nomorTelepon}")]
-        public IActionResult cariNomorTelepon(string nomorTelepon)
-        {
-            PenggunaContext penggunaContext = new PenggunaContext(this.__constr);
-            bool penggunaExist = penggunaContext.cariNomorTelepon(nomorTelepon);
-
-            if (!penggunaExist)
-            {
-                return StatusCode(500, new { message = "Tidak menemukan pengguna dengan nomor telepon itu!" });
-            }
-
-            return Ok(new { message = "Pengguna dengan nomor telepon itu ditemukan!" });
-
-        }
-
         [HttpPost("login")]
-        public IActionResult login(Login login)
+        public IActionResult login(Pengguna data)
         {
             try
             {
-                PenggunaContext penggunaContext = new PenggunaContext(this.__constr);
-                bool penggunaExist = penggunaContext.checkLogin(login.email, login.password);
+                AuthContext penggunaContext = new AuthContext(this.__constr);
+                bool penggunaExist = penggunaContext.checkLogin(data.email, data.password);
 
                 if (!penggunaExist)
                 {
                     return Unauthorized(new { message = "Email atau password salah!" });
                 }
 
-                List<Pengguna> user = penggunaContext.getDataLogin(login.email, login.password);
+                List<Pengguna> user = penggunaContext.getDataLogin(data.email, data.password);
                 return Ok(user);
             }
             catch (Exception ex)
@@ -59,11 +44,11 @@ namespace api_bangun_kebun.Controllers
 
 
         [HttpPost("registration")]
-        public IActionResult registration(RegistrasiPengguna data)
+        public IActionResult registration(Pengguna data)
         {
             try
             {
-                PenggunaContext penggunaContext = new PenggunaContext(this.__constr);
+                AuthContext penggunaContext = new AuthContext(this.__constr);
                 bool result = penggunaContext.registrasiAkun(data);
 
                 if (result)
@@ -90,7 +75,7 @@ namespace api_bangun_kebun.Controllers
         {
             try
             {
-                PenggunaContext penggunaContext = new PenggunaContext(this.__constr);
+                AuthContext penggunaContext = new AuthContext(this.__constr);
                 bool update = penggunaContext.updateProfile(data);
 
                 if (update)
@@ -116,7 +101,7 @@ namespace api_bangun_kebun.Controllers
         {
             try
             {
-                PenggunaContext penggunaContext = new PenggunaContext(this.__constr);
+                AuthContext penggunaContext = new AuthContext(this.__constr);
                 bool update = penggunaContext.updatePassword(password, id);
 
                 if (update)
