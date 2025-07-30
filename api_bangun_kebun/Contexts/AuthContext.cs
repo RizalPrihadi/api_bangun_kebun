@@ -4,41 +4,17 @@ using Npgsql;
 
 namespace api_bangun_kebun.Contexts
 {
-    public class PenggunaContext
+    public class AuthContext
     {
         private string _constr;
 
-        public PenggunaContext(string conn)
+        public AuthContext(string conn)
         {
             _constr = conn;
         }
-        public bool cariNomorTelepon(string no_telepon)
+        public bool registrasiAkun(Pengguna dataRegis)
         {
-            bool isExist = false;
-            string query = @"SELECT COUNT(*) FROM pengguna WHERE no_telepon = @no_telepon";
-            SqlDbHelper db = new SqlDbHelper(this._constr);
-
-            try
-            {
-                NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
-                cmd.Parameters.AddWithValue("@no_telepon", no_telepon);
-
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                isExist = (count > 0);
-
-                cmd.Dispose();
-                db.CloseConnection();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Registrasi gagal: " + ex.Message);
-            }
-
-            return isExist;
-        }
-        public bool registrasiAkun(RegistrasiPengguna dataRegis)
-        {
-            List<RegistrasiPengguna> dataRegistrasi = new List<RegistrasiPengguna>();
+            List<Pengguna> dataRegistrasi = new List<Pengguna>();
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
             string query = @"insert into pengguna(nama_lengkap, no_telepon, username, email, password, kecamatan_id_kecamatan) values(@nama_lengkap, @no_telepon, @username, @email, @password, @id_kecamatan)";
@@ -97,8 +73,6 @@ namespace api_bangun_kebun.Contexts
 
             string query = @"SELECT id_user, nama_lengkap, username, no_telepon, email, password, kecamatan_id_kecamatan FROM pengguna p 
                             join kecamatan ke on p.kecamatan_id_kecamatan = ke.id_kecamatan
-                            join kabupaten ka on ka.id_kabupaten = ke.kabupaten_id_kabupaten
-                            join provinsi pr on pr.id_provinsi = ka.provinsi_id_provinsi
                             WHERE email = @email and password = @password";
 
             SqlDbHelper db = new SqlDbHelper(this._constr);
