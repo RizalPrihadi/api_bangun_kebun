@@ -98,6 +98,7 @@ namespace api_bangun_kebun.Contexts
                         no_telepon = reader["no_telepon"].ToString(),
                         username = reader["username"].ToString(),
                         email = reader["email"].ToString(),
+                        password = reader["password"].ToString(),
                         id_kecamatan = int.Parse(reader["kecamatan_id_kecamatan"].ToString()),
                     });
                 }

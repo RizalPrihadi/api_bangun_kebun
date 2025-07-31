@@ -27,5 +27,50 @@ namespace api_bangun_kebun.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet("DataProvinsi")]
+        public IActionResult getDataProvinsi()
+        {
+            OtherContext otherContext = new OtherContext(this._constr);
+
+            List<dynamic> data = otherContext.getDataProvinsi();
+
+            if (data.Count > 0)
+            {
+                return Ok(data);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet("DataKabupatenByProvinsi/{id_provinsi}")]
+        public IActionResult getDataKabupaten(int id_provinsi)
+        {
+            OtherContext otherContext = new OtherContext(this._constr);
+
+            List<dynamic> data = otherContext.getDataKabupatenByProvinsi(id_provinsi);
+
+            if (data.Count > 0)
+            {
+                return Ok(data);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet("DataKecamatanByKabupaten/{id_kabupaten}")]
+        public IActionResult getDataKecamatan(int id_kabupaten)
+        {
+            OtherContext otherContext = new OtherContext(this._constr);
+
+            List<dynamic> data = otherContext.getDataKecamatanByKabupaten(id_kabupaten);
+
+            if (data.Count > 0)
+            {
+                return Ok(data);
+            }
+
+            return BadRequest();
+        }
     }
 }
