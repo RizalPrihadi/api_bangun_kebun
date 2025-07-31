@@ -35,7 +35,7 @@ namespace api_bangun_kebun.Contexts
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
 
                 return rowsAffected > 0;
             }
@@ -57,7 +57,7 @@ namespace api_bangun_kebun.Contexts
                 string hashedPassword = cmd.ExecuteScalar()?.ToString();
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
 
                 if (string.IsNullOrEmpty(hashedPassword))
                 {
@@ -98,12 +98,13 @@ namespace api_bangun_kebun.Contexts
                         no_telepon = reader["no_telepon"].ToString(),
                         username = reader["username"].ToString(),
                         email = reader["email"].ToString(),
+                        password = reader["password"].ToString(),
                         id_kecamatan = int.Parse(reader["kecamatan_id_kecamatan"].ToString()),
                     });
                 }
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
             }
             catch (Exception ex)
             {
@@ -138,7 +139,7 @@ namespace api_bangun_kebun.Contexts
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
 
                 return rowsAffected > 0;
             }
@@ -148,52 +149,53 @@ namespace api_bangun_kebun.Contexts
             }
         }
 
-        public bool checkPassword(string password, string email)
+        public bool checkPassword(string password, int id_user)
         {
-            bool isExist = false;
-            string query = @"SELECT COUNT (*) FROM pengguna WHERE password = @password AND email = @email";
+            bool isTrue = false;
+            string query = @"SELECT password FROM pengguna WHERE id_user = @id_user";
             SqlDbHelper db = new SqlDbHelper(this._constr);
-
             try
             {
                 NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
-                cmd.Parameters.AddWithValue("@email", email);
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-                cmd.Parameters.AddWithValue("@password", hashedPassword);
+                cmd.Parameters.AddWithValue("@id_user", id_user);
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                isExist = (count > 0);
+                object result = cmd.ExecuteScalar();
+
+                if (result != null)
+                {
+                    string hashedPasswordFromDB = result.ToString();
+                    isTrue = BCrypt.Net.BCrypt.Verify(password, hashedPasswordFromDB);
+                }
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
             }
             catch (Exception ex)
             {
-                throw new Exception("Registrasi gagal: " + ex.Message);
+                throw new Exception("Pengecekan password gagal: " + ex.Message);
             }
-
-            return isExist;
+            return isTrue;
         }
 
-        public bool updatePassword(string password, string email)
+        public bool updatePassword(string password, int id_user)
         {
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
             string query = @"update pengguna set 
                                     password = @password
-                            where email = @email";
+                            where id_user = @id_user";
 
             try
             {
                 NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
-                cmd.Parameters.AddWithValue("@email", email);
+                cmd.Parameters.AddWithValue("@id_user", id_user);
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
                 cmd.Parameters.AddWithValue("@password", hashedPassword);
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
 
                 return rowsAffected > 0;
             }

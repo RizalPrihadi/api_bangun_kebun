@@ -25,7 +25,7 @@ namespace api_bangun_kebun.Helpers
             return cmd;
         }
 
-        public void closeConnection()
+        public void CloseConnection()
         {
             connection.Close();
         }
