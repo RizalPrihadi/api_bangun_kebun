@@ -82,7 +82,7 @@ namespace api_bangun_kebun.Contexts
                 }
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@ namespace api_bangun_kebun.Contexts
                 }
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
             }
             catch (Exception ex)
             {
@@ -166,7 +166,7 @@ namespace api_bangun_kebun.Contexts
                 }
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
             }
             catch (Exception ex)
             {
@@ -196,7 +196,7 @@ namespace api_bangun_kebun.Contexts
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
 
                 return rowsAffected > 0;
             }
@@ -232,7 +232,7 @@ namespace api_bangun_kebun.Contexts
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
 
                 return rowsAffected > 0;
             }
@@ -255,7 +255,7 @@ namespace api_bangun_kebun.Contexts
                 int rowsAffected = cmd.ExecuteNonQuery();
 
                 cmd.Dispose();
-                db.closeConnection();
+                db.CloseConnection();
 
                 return rowsAffected > 0;
             }
