@@ -19,7 +19,8 @@ namespace api_bangun_kebun.Contexts
             List<Pengguna> dataRegistrasi = new List<Pengguna>();
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
-            string query = @"insert into pengguna(nama_lengkap, no_telepon, username, email, password, kecamatan_id_kecamatan) values(@nama_lengkap, @no_telepon, @username, @email, @password, @id_kecamatan)";
+            string query = @"INSERT INTO pengguna(nama_lengkap, no_telepon, username, email, password, kecamatan_id_kecamatan) 
+                            VALUES(@nama_lengkap, @no_telepon, @username, @email, @password, @id_kecamatan)";
 
             try
             {
@@ -78,7 +79,7 @@ namespace api_bangun_kebun.Contexts
             List<Pengguna> pengguna = new List<Pengguna>();
 
             string query = @"SELECT * FROM pengguna p 
-                            join kecamatan ke on p.kecamatan_id_kecamatan = ke.id_kecamatan
+                            JOIN kecamatan ke ON p.kecamatan_id_kecamatan = ke.id_kecamatan
                             WHERE email = @email";
 
             SqlDbHelper db = new SqlDbHelper(this._constr);
@@ -117,13 +118,13 @@ namespace api_bangun_kebun.Contexts
         {
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
-            string query = @"update pengguna set 
+            string query = @"UPDATE pengguna SET 
                                     nama_lengkap = @nama_lengkap, 
                                     username = @username, 
                                     no_telepon = @no_telepon, 
                                     email = @email, 
                                     kecamatan_id_kecamatan = @id_kecamatan
-                            where id_user = @id_user";
+                            WHERE id_user = @id_user";
 
             try
             {
@@ -179,9 +180,9 @@ namespace api_bangun_kebun.Contexts
         {
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
-            string query = @"update pengguna set 
+            string query = @"UPDATE pengguna SET 
                                     password = @password
-                            where email = @email";
+                            WHERE email = @email";
 
             try
             {
