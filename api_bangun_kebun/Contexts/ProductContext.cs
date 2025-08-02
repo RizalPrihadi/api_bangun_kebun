@@ -36,6 +36,8 @@ namespace api_bangun_kebun.Contexts
                         gambar_produk = reader["gambar_produk"].ToString(),
                         harga = double.Parse(reader["harga"].ToString()),
                         stok = int.Parse(reader["stok"].ToString()),
+                        deskripsi = reader["deskripsi"].ToString(),
+                        lokasi = reader["lokasi"].ToString(),
                         timestamp = DateTime.Parse(reader["timestamp"].ToString()),
                         id_jenis_produk = int.Parse(reader["jenis_produk_id_jenis_produk"].ToString()),
                         id_status_ketahanan = int.Parse(reader["status_ketahanan_id_status_ketahanan"].ToString())
@@ -77,6 +79,8 @@ namespace api_bangun_kebun.Contexts
                         gambar_produk = reader["gambar_produk"].ToString(),
                         harga = double.Parse(reader["harga"].ToString()),
                         stok = int.Parse(reader["stok"].ToString()),
+                        deskripsi = reader["deskripsi"].ToString(),
+                        lokasi = reader["lokasi"].ToString(),
                         timestamp = DateTime.Parse(reader["timestamp"].ToString()),
                         id_jenis_produk = int.Parse(reader["jenis_produk_id_jenis_produk"].ToString()),
                         id_status_ketahanan = int.Parse(reader["status_ketahanan_id_status_ketahanan"].ToString())
@@ -120,6 +124,8 @@ namespace api_bangun_kebun.Contexts
                         gambar_produk = reader["gambar_produk"].ToString(),
                         harga = double.Parse(reader["harga"].ToString()),
                         stok = int.Parse(reader["stok"].ToString()),
+                        deskripsi = reader["deskripsi"].ToString(),
+                        lokasi = reader["lokasi"].ToString(),
                         timestamp = DateTime.Parse(reader["timestamp"].ToString()),
                         id_jenis_produk = int.Parse(reader["jenis_produk_id_jenis_produk"].ToString()),
                         id_status_ketahanan = int.Parse(reader["status_ketahanan_id_status_ketahanan"].ToString())
@@ -163,6 +169,8 @@ namespace api_bangun_kebun.Contexts
                         gambar_produk = reader["gambar_produk"].ToString(),
                         harga = double.Parse(reader["harga"].ToString()),
                         stok = int.Parse(reader["stok"].ToString()),
+                        deskripsi = reader["deskripsi"].ToString(),
+                        lokasi = reader["lokasi"].ToString(),
                         timestamp = DateTime.Parse(reader["timestamp"].ToString()),
                         id_jenis_produk = int.Parse(reader["jenis_produk_id_jenis_produk"].ToString()),
                         id_status_ketahanan = int.Parse(reader["status_ketahanan_id_status_ketahanan"].ToString())
@@ -184,8 +192,8 @@ namespace api_bangun_kebun.Contexts
         {
             SqlDbHelper db = new SqlDbHelper(this._constr);
 
-            string query = @"INSERT INTO produks (pengguna_id_user, nama_produk, gambar_produk, harga, stok, timestamp, jenis_produk_id_jenis_produk, status_ketahanan_id_status_ketahanan)
-                            VALUES(@id_user, @nama_produk, @gambar_produk, @harga, @stok, @timestamp, @id_jenis_produk, @id_status_ketahanan)";
+            string query = @"INSERT INTO produks (pengguna_id_user, nama_produk, gambar_produk, harga, stok, deskripsi, lokasi, timestamp, jenis_produk_id_jenis_produk, status_ketahanan_id_status_ketahanan)
+                            VALUES(@id_user, @nama_produk, @gambar_produk, @harga, @stok, @deskripsi, @lokasi, @timestamp, @id_jenis_produk, @id_status_ketahanan)";
             try
             {
                 NpgsqlCommand cmd = db.GetNpgsqlCommand(query);
@@ -194,6 +202,8 @@ namespace api_bangun_kebun.Contexts
                 cmd.Parameters.AddWithValue("@gambar_produk", product.gambar_produk);
                 cmd.Parameters.AddWithValue("@harga", product.harga);
                 cmd.Parameters.AddWithValue("@stok", product.stok);
+                cmd.Parameters.AddWithValue("@deskripsi", product.deskripsi);
+                cmd.Parameters.AddWithValue("@lokasi", product.lokasi);
                 cmd.Parameters.AddWithValue("@timestamp", product.timestamp);
                 cmd.Parameters.AddWithValue("@id_jenis_produk", product.id_jenis_produk);
                 cmd.Parameters.AddWithValue("@id_status_ketahanan", product.id_status_ketahanan);
@@ -220,6 +230,8 @@ namespace api_bangun_kebun.Contexts
                                 gambar_produk = @gambar_produk, 
                                 harga = @harga,
                                 stok = @stok,
+                                deskripsi = @deskripsi,
+                                lokasi = @lokasi,
                                 timestamp = @timestamp, 
                                 jenis_produk_id_jenis_produk = @id_jenis_produk, 
                                 status_ketahanan_id_status_ketahanan = @id_status_ketahanan
@@ -232,6 +244,8 @@ namespace api_bangun_kebun.Contexts
                 cmd.Parameters.AddWithValue("@gambar_produk", product.gambar_produk);
                 cmd.Parameters.AddWithValue("@harga", product.harga);
                 cmd.Parameters.AddWithValue("@stok", product.stok);
+                cmd.Parameters.AddWithValue("@deskripsi", product.deskripsi);
+                cmd.Parameters.AddWithValue("@lokasi", product.lokasi);
                 cmd.Parameters.AddWithValue("@timestamp", product.timestamp);
                 cmd.Parameters.AddWithValue("@id_jenis_produk", product.id_jenis_produk);
                 cmd.Parameters.AddWithValue("@id_status_ketahanan", product.id_status_ketahanan);

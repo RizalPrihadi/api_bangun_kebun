@@ -8,6 +8,8 @@
         public string? gambar_produk { get; set; }
         public double? harga { get; set; }
         public int? stok { get; set; }
+        public string? deskripsi { get; set; }
+        public string? lokasi { get; set; }
         public DateTime? timestamp { get; set; }
         public int? id_jenis_produk { get; set; }
         public int? id_status_ketahanan { get; set; }
