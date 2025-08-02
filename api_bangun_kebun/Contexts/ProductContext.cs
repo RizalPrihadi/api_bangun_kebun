@@ -30,7 +30,7 @@ namespace api_bangun_kebun.Contexts
                 {
                     product.Add(new Product
                     {
-                        id_user = int.Parse(reader["id_user"].ToString()),
+                        id_user = int.Parse(reader["pengguna_id_user"].ToString()),
                         id_produk = int.Parse(reader["id_produk"].ToString()),
                         nama_produk = reader["nama_produk"].ToString(),
                         gambar_produk = reader["gambar_produk"].ToString(),
@@ -96,8 +96,8 @@ namespace api_bangun_kebun.Contexts
         {
             List<Product> dataProduct = new List<Product>();
 
-            string query = @"SELECT * FROM produks
-                            JOIN pengguna ON produks.pengguna_id_pengguna = pengguna.id_pengguna
+            string query = @"SELECT * FROM produks pr
+                            JOIN pengguna pe ON pr.pengguna_id_user = pe.id_user
                             WHERE nama_lengkap = @nama_lengkap";
 
             SqlDbHelper db = new SqlDbHelper(this._constr);
@@ -138,8 +138,8 @@ namespace api_bangun_kebun.Contexts
         {
             List<Product> dataProduct = new List<Product>();
 
-            string query = @"SELECT * FROM produks
-                            JOIN jenis_produk ON produks.jenis_produk_id_jenis_produk = jenis_produk.id_jenis_product
+            string query = @"SELECT * FROM produks pr
+                            JOIN jenis_produk jp ON pr.jenis_produk_id_jenis_produk = jp.id_jenis_produk
                             WHERE nama_jenis_product = @nama_jenis_product";
 
             SqlDbHelper db = new SqlDbHelper(this._constr);

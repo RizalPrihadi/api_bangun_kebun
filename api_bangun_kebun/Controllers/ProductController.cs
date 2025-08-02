@@ -42,7 +42,7 @@ namespace api_bangun_kebun.Controllers
             }
         }
 
-        [HttpGet("dataProductById/{id_product}")]
+        [HttpGet("dataProductById/{id_produk}")]
         public IActionResult getDataProductById(int id_produk)
         {
             try
