@@ -3,7 +3,7 @@
     public class Product
     {
         public int? id_user { get; set; }
-        public int? id_product { get; set; }
+        public int? id_produk { get; set; }
         public string? nama_produk { get; set; }
         public string? gambar_produk { get; set; }
         public double? harga { get; set; }
